@@ -332,11 +332,15 @@ function buildUrl(url, path, query, isSocket) {
 }
 
 function filtersToJSON(filters) {
-  var keys = Object.keys(filters);
-  keys.forEach(function (key) {
-    filters[key] = [filters[key].toString()];
-  })
-  return JSON.stringify(filters);
+  const dockerFilters = {};
+  for (const key of Object.keys(filters)) {
+      let data = filters[key];
+      if (!Array.isArray(data)) {
+          data = [data];
+      }
+      dockerFilters[key] = data.map(v => v.toString());
+  }
+  return JSON.stringify(dockerFilters);
 }
 
 /**
